@@ -5,10 +5,13 @@ Solving puzzles using C#: [Advent of Code 2023](https://adventofcode.com/2023)
 The code that calculates solutions to the Advent of Code puzzles is started from `program.cs`, by editing the file to start a given puzzle.
 All input files are copied to the output directory on build, and are loaded from that directory.
 
-# Get started
+# Running the applicaiton
 1. Clone the repo
 1. Install .NET 10
-1. Run `dotnet run` from the command line to run a puzzle
+1. Run `dotnet run` on the command line in the /src/ folder to run a puzzle
+
+# Running tests
+1. Run `dotnet test` on the command line 
 
 # Overview and progress
-Day1: [src/day01.cs](src/day01.cs) ⭐
+Day1: [src/day01part1.cs](src/day01part1.cs) ⭐ [src/day01part2.cs](src/day01part2.cs) ⭐

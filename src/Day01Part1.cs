@@ -1,6 +1,3 @@
-using System.Runtime.InteropServices.Marshalling;
-using System.Security.Principal;
-
 public class Day01Part1
 {
     public int Solve()

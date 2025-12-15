@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <TxtFiles Include="src/*.txt" />
+    <None Update="*.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
-  <Target Name="CopyInputFiles" AfterTargets="AfterBuild">
-    <Copy SourceFiles="@(TxtFiles)" DestinationFolder="$(OutDir)" />
-  </Target>
+  <ItemGroup>
+    <InternalsVisibleTo Include="AdventOfCode2025.Tests" />
+  </ItemGroup>
 
 </Project>

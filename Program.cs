@@ -1,3 +1,0 @@
-﻿Console.WriteLine("Hello, World!");
-
-Console.WriteLine("Advent of Code 2025 - Day 01 Part 1. Solution = " + new Day01Part1().Solve());
