@@ -15,4 +15,5 @@ All input files are copied to the output directory on build, and are loaded from
 
 # Overview and progress
 Day1: [src/Day01Part1.cs](src/Day01Part1.cs) ⭐ [src/Day01Part2.cs](src/Day01Part2.cs) ⭐
-Day2: [src/Day02Part1.cs](src/Day02Part1.cs) ⭐
+
+Day2: [src/Day02Part1.cs](src/Day02Part1.cs) ⭐ [src/Day02Part2.cs](src/Day02Part2.cs) ⭐
