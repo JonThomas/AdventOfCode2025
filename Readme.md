@@ -14,4 +14,5 @@ All input files are copied to the output directory on build, and are loaded from
 1. Run `dotnet test` on the command line 
 
 # Overview and progress
-Day1: [src/day01part1.cs](src/day01part1.cs) ⭐ [src/day01part2.cs](src/day01part2.cs) ⭐
+Day1: [src/Day01Part1.cs](src/Day01Part1.cs) ⭐ [src/Day01Part2.cs](src/Day01Part2.cs) ⭐
+Day2: [src/Day02Part1.cs](src/Day02Part1.cs) ⭐
