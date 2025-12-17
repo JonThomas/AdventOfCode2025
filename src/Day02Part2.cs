@@ -17,6 +17,7 @@ public class Day02Part2
 
         foreach (var range in ranges)
         {
+            // The next foreach loop iterates the custom IEnumerable Range class, that has already had a lot of numbers removed
             foreach(var potentialValidProductId in range)
             {
                 string prodIdString = potentialValidProductId.ToString();
@@ -42,7 +43,6 @@ public class Day02Part2
         // Loop to check first the if two chars are repeated, then three, ... 
         for (int repeatedCharLength = 2; repeatedCharLength <= prodIdString.Length / 2; repeatedCharLength++)
         {
-            // Loop to check if the substring repeats throughout the string
             if(CheckForRepeatedSubstringsWithThisLength(prodIdString, repeatedCharLength))
             {
                 Console.WriteLine($"Found invalid product ID: {prodIdString} with pattern {prodIdString[..repeatedCharLength]}");
