@@ -19,3 +19,5 @@ Day1: [src/Day01Part1.cs](src/Day01Part1.cs) ⭐ [src/Day01Part2.cs](src/Day01Pa
 Day2: [src/Day02Part1.cs](src/Day02Part1.cs) ⭐ [src/Day02Part2.cs](src/Day02Part2.cs) ⭐
 
 Day3: [src/Day03Part1.cs](src/Day03Part1.cs) ⭐ [src/Day03Part2.cs](src/Day03Part2.cs) ⭐
+
+Day4: [src/Day04Part1.cs](src/Day04Part1.cs) ⭐
