@@ -23,3 +23,5 @@ Day3: [src/Day03Part1.cs](src/Day03Part1.cs) ⭐ [src/Day03Part2.cs](src/Day03Pa
 Day4: [src/Day04Part1.cs](src/Day04Part1.cs) ⭐ [src/Day04Part2.cs](src/Day04Part2.cs) ⭐
 
 Day5: [src/Day05Part1.cs](src/Day05Part1.cs) ⭐ [src/Day05Part2.cs](src/Day05Part2.cs) ⭐
+
+Day6: [src/Day06Part1.cs](src/Day06Part1.cs) ⭐ Part one was mostly an input problem - when everything was read in correctly, it was just a matter of calculating the sum (and remember to not start multiplying when the initial value was 0)
