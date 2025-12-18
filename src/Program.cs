@@ -7,4 +7,6 @@
 //Console.WriteLine("Advent of Code 2025 - Day 03 Part 1. Solution = " + new Day03Part1().Solve());
 //Console.WriteLine("Advent of Code 2025 - Day 03 Part 2. Solution = " + new Day03Part2().Solve());
 //Console.WriteLine("Advent of Code 2025 - Day 04 Part 1. Solution = " + new Day04Part1().Solve());
-Console.WriteLine("Advent of Code 2025 - Day 04 Part 2. Solution = " + new Day04Part2().Solve());
+//Console.WriteLine("Advent of Code 2025 - Day 04 Part 2. Solution = " + new Day04Part2().Solve());
+//Console.WriteLine("Advent of Code 2025 - Day 05 Part 1. Solution = " + new Day05Part1().Solve());
+Console.WriteLine("Advent of Code 2025 - Day 05 Part 2. Solution = " + new Day05Part2().Solve());

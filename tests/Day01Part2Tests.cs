@@ -5,7 +5,7 @@ namespace AdventOfCode2025.Tests;
 public class Day01Part2Tests
 {
     [Fact]
-    public void DialStartsAtZero_ReturnsZero()
+    public void Day1_DialStartsAtZero_ReturnsZero()
     {
         var dialAt = 0;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 1, 'L');
@@ -14,7 +14,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialStartsAtZeroAndTwoRounds_ReturnsTwo()
+    public void Day1_DialStartsAtZeroAndTwoRounds_ReturnsTwo()
     {
         var dialAt = 0;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 204, 'L');
@@ -23,7 +23,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialStartsAtZeroAndTwoRoundsAndEndsAtZero_ReturnsThree()
+    public void Day1_DialStartsAtZeroAndTwoRoundsAndEndsAtZero_ReturnsThree()
     {
         var dialAt = 0;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 300, 'L');
@@ -32,7 +32,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialEndsAtZero_ReturnsOne()
+    public void Day1_DialEndsAtZero_ReturnsOne()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 1, 'L');
@@ -41,7 +41,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialPassesZero_ReturnsOne()
+    public void Day1_DialPassesZero_ReturnsOne()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 2, 'L');
@@ -50,7 +50,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialPassesZeroTwice_ReturnsTwo()
+    public void Day1_DialPassesZeroTwice_ReturnsTwo()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 102, 'L');
@@ -59,7 +59,7 @@ public class Day01Part2Tests
     }
     
     [Fact]
-    public void DialPassesZeroThreeTimes_ReturnsThree()
+    public void Day1_DialPassesZeroThreeTimes_ReturnsThree()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 202, 'L');
@@ -68,7 +68,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialPassesZeroThreeTimesAndEndsOnZero_ReturnsFour()
+    public void Day1_DialPassesZeroThreeTimesAndEndsOnZero_ReturnsFour()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 301, 'L');
@@ -77,7 +77,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRightStartsAtZero_ReturnsZero()
+    public void Day1_DialRightStartsAtZero_ReturnsZero()
     {
         var dialAt = 0;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 1, 'R');
@@ -86,7 +86,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRightStartsAtZeroAndTwoRounds_ReturnsTwo()
+    public void Day1_DialRightStartsAtZeroAndTwoRounds_ReturnsTwo()
     {
         var dialAt = 0;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 204, 'R');
@@ -95,7 +95,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRightStartsAtZeroAndTwoRoundsAndEndsAtZero_ReturnsThree()
+    public void Day1_DialRightStartsAtZeroAndTwoRoundsAndEndsAtZero_ReturnsThree()
     {
         var dialAt = 0;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 300, 'L');
@@ -104,7 +104,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRightEndsAtZero_ReturnsOne()
+    public void Day1_DialRightEndsAtZero_ReturnsOne()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 99, 'R');
@@ -113,7 +113,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRightPassesZero_ReturnsOne()
+    public void Day1_DialRightPassesZero_ReturnsOne()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 101, 'R');
@@ -122,7 +122,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRightPassesZeroTwice_ReturnsTwo()
+    public void Day1_DialRightPassesZeroTwice_ReturnsTwo()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 201, 'R');
@@ -131,7 +131,7 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRithgPassesZeroThreeTimes_ReturnsThree()
+    public void Day1_DialRightPassesZeroThreeTimes_ReturnsThree()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 302, 'R');
@@ -140,12 +140,11 @@ public class Day01Part2Tests
     }
 
     [Fact]
-    public void DialRightPassesZeroThreeTimesAndEndsOnZero_ReturnsFour()
+    public void Day1_DialRightPassesZeroThreeTimesAndEndsOnZero_ReturnsFour()
     {
         var dialAt = 1;
         var timesTurnedPastZero = new Day01Part2.Combination().CheckForZero(dialAt, 399, 'R');
 
         Assert.Equal(4, timesTurnedPastZero);
     }
-
 }
