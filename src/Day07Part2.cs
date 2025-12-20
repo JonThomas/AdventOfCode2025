@@ -2,8 +2,13 @@ public class Day07Part2
 {
     public long Solve()
     {
-        // Idea: Model the beams as edges, and the splitters as nodes in a graph.
+        // Original idea: Model the beams as edges, and the splitters as nodes in a graph.
         // Then traverse the graph recursively, counting all possible ways to reach a leaf node from the start node.
+
+        // Refined idea: Keep the graph as it was originally, but instead of recursively traversing all paths, have 
+        // each Splitter count the number of paths to each edge from itself, AND STORE IT(!) so that it is only 
+        // calculated once.
+        // This reduced the computation time from more than 4 hours (still running!) to half a second :-)
 
         var input = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Day07Part2Input.txt"));
 
@@ -29,13 +34,9 @@ public class Day07Part2
             }
         }
 
-        long pathCount = 0;
-        long totalPaths = TraverseGraf(splitterParent!, ref pathCount);
+        long totalPaths = splitterParent!.GetNumberOfPathsToEdgesFromMe();
 
-        Console.WriteLine();
-        Console.WriteLine($"Total paths through the splitter graph: {totalPaths} - {pathCount}");
-
-        return pathCount;
+        return totalPaths;
     }
 
     private void BuildSplitterGraph(ref List<Splitter> splitters)
@@ -55,37 +56,6 @@ public class Day07Part2
         }
     }
 
-    private long TraverseGraf(Splitter splitter, ref long pathsSoFar)
-    {
-        var leftChild = splitter.GetLeftChild();
-        if(leftChild == null)
-        {
-            // Reached an end node
-            pathsSoFar++;
-            //Console.WriteLine($"Reached left leaf node at {splitter}. Total paths so far: {pathsSoFar}");
-        }
-        else if(leftChild != null)
-        {
-            pathsSoFar = TraverseGraf(leftChild, ref pathsSoFar);
-        }
-
-        var rightChild = splitter.GetRightChild();
-        if(rightChild == null)
-        {
-            // Reached an end node
-            pathsSoFar++;
-            //Console.WriteLine($"Reached right leaf node at {splitter}. Total paths so far: {pathsSoFar}");
-        }
-        else if(rightChild != null)
-        {
-            pathsSoFar = TraverseGraf(rightChild, ref pathsSoFar);
-        }
-        if(pathsSoFar % 10000000 == 0)
-        {
-            Console.WriteLine($"{pathsSoFar}. Processing ({splitter.GetX()},{splitter.GetY()})");
-        }
-        return pathsSoFar;
-    }
 
     private List<Splitter> CreateSplitters(int start, List<List<int>> splitterRows)
     {
@@ -159,6 +129,8 @@ public class Day07Part2
         private Splitter? rightChild;
         private readonly int x;
         private readonly int y;
+        private long totalPathsToEdgeFromMeOnLeft = -1;
+        private long totalPathsToEdgeFromMeOnRight = -1;
 
         public Splitter(int x, int y)
         {
@@ -202,21 +174,38 @@ public class Day07Part2
             return y;
         }
 
-        public Splitter? GetLeftChild()
+        public long GetNumberOfPathsToEdgesFromMe()
         {
-            return leftChild;
-        }
+            if(totalPathsToEdgeFromMeOnLeft != -1 && totalPathsToEdgeFromMeOnRight != -1)
+            {
+                // Edges have already been calculated for this Splitter
+                return totalPathsToEdgeFromMeOnLeft + totalPathsToEdgeFromMeOnRight;
+            }
 
-        public Splitter? GetRightChild()
-        {
-            return rightChild;
+            if(leftChild == null)
+            {
+                totalPathsToEdgeFromMeOnLeft = 1;
+            }
+            else
+            {
+                totalPathsToEdgeFromMeOnLeft = leftChild.GetNumberOfPathsToEdgesFromMe();
+            }
+            if(rightChild == null)
+            {
+                totalPathsToEdgeFromMeOnRight = 1;
+            }
+            else
+            {
+                totalPathsToEdgeFromMeOnRight = rightChild.GetNumberOfPathsToEdgesFromMe();
+            }
+            return totalPathsToEdgeFromMeOnLeft + totalPathsToEdgeFromMeOnRight;
         }
 
         public override string ToString()
         {
             string left = leftChild == null ? "null" : $"({leftChild.GetX()},{leftChild.GetY()})";
             string right = rightChild == null ? "null" : $"({rightChild.GetX()},{rightChild.GetY()})";
-            return $"Splitter at ({x},{y}), with LeftChild: {left}, RightChild: {right}";
+            return $"Splitter ({x},{y}) with {totalPathsToEdgeFromMeOnLeft} paths to edges from me. LeftChild: {left}, RightChild: {right}";
         }
     }
 }
