@@ -12,4 +12,5 @@
 //Console.WriteLine("Advent of Code 2025 - Day 05 Part 2. Solution = " + new Day05Part2().Solve());
 //Console.WriteLine("Advent of Code 2025 - Day 06 Part 1. Solution = " + new Day06Part1().Solve());
 //Console.WriteLine("Advent of Code 2025 - Day 06 Part 2. Solution = " + new Day06Part2().Solve());
-Console.WriteLine("Advent of Code 2025 - Day 07 Part 1. Solution = " + new Day07Part1().Solve());
+//Console.WriteLine("Advent of Code 2025 - Day 07 Part 1. Solution = " + new Day07Part1().Solve());
+Console.WriteLine("Advent of Code 2025 - Day 07 Part 2. Solution = " + new Day07Part2().Solve());

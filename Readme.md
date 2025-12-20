@@ -13,6 +13,10 @@ All input files are copied to the output directory on build, and are loaded from
 # Running tests
 1. Run `dotnet test` on the command line 
 
+# Running CPU intensive puzzles
+1. Run `dotnet build -c Release` on the command line, and start the applicaition from the bin\Release\net10.0\ folder.
+This will speed up the execution several times.
+
 # Overview and progress
 Day1: [src/Day01Part1.cs](src/Day01Part1.cs) ⭐ [src/Day01Part2.cs](src/Day01Part2.cs) ⭐
 
@@ -24,6 +28,6 @@ Day4: [src/Day04Part1.cs](src/Day04Part1.cs) ⭐ [src/Day04Part2.cs](src/Day04Pa
 
 Day5: [src/Day05Part1.cs](src/Day05Part1.cs) ⭐ [src/Day05Part2.cs](src/Day05Part2.cs) ⭐
 
-Day6: [src/Day06Part1.cs](src/Day06Part1.cs) ⭐ [src/Day05Part2.cs](src/Day05Part2.cs) ⭐ Both part one and were mostly an input problem - when everything was read in correctly, it was just a matter of calculating the sum (and remember to not start multiplying when the initial value was 0)
+Day6: [src/Day06Part1.cs](src/Day06Part1.cs) ⭐ [src/Day06Part2.cs](src/Day06Part2.cs) ⭐ Both part one and were mostly an input problem - when everything was read in correctly, it was just a matter of calculating the sum (and remember to not start multiplying when the initial value was 0)
 
-Day7: [src/Day07Part1.cs](src/Day07Part1.cs) ⭐ 
+Day7: [src/Day07Part1.cs](src/Day07Part1.cs) ⭐ [src/Day07Part2.cs](src/Day07Part2.cs) ⭐ After some trials and errors on Part2 I finally managed to have a proper graph and a recursive method to traverse it. But for a long time I though my implementation was flawed, because is seemed to go through an infinite loop. But the solution was to just wait, while the computer calculated the insanely large number of solutions!
