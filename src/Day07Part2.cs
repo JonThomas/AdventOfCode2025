@@ -8,7 +8,7 @@ public class Day07Part2
         // Refined idea: Keep the graph as it was originally, but instead of recursively traversing all paths, have 
         // each Splitter count the number of paths to each edge from itself, AND STORE IT(!) so that it is only 
         // calculated once.
-        // This reduced the computation time from more than 4 hours (still running!) to half a second :-)
+        // This reduced the computation time from probably around 12 hours (still running!) to half a second :-)
 
         var input = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Day07Part2Input.txt"));
 
