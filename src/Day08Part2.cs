@@ -1,8 +1,8 @@
-public class Day08Part1
+public class Day08Part2
 {
     public long Solve()
     {
-        var input = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Day08Part1Input.txt"));
+        var input = File.ReadAllLines(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Day08Part2Input.txt"));
         var points = new List<JunctionBox>();
         for(int i = 0; i < input.Length; i++)
         {
@@ -19,22 +19,17 @@ public class Day08Part1
         var circuitManager = new CircuitManager();
 
         Console.WriteLine("All distances, shortes distances on top:");
-        for(int i = 0; i < TestOrRealData(input); i++)
+
+        for(int i = 0; i < orderedDistances.Count; i++)
         {
             var dist = orderedDistances[i];
-            Console.WriteLine($"{i}: From {dist.Point1} to {dist.Point2} is {dist.Distance}");
             circuitManager.Add(dist);
         }
 
-        var (circuit1, circuit2, circuit3) = circuitManager.ThreeLargestCircuits();
-        return circuit1 * circuit2 * circuit3;
-    }
+        var junctionBoxes = circuitManager.JunctionBoxesCausingLatestMerge();
+        Console.WriteLine($"The two junction boxes that caused the latest merge are {junctionBoxes.Item1} and {junctionBoxes.Item2}");
 
-    private int TestOrRealData(string[] input)
-    {
-        if(input.Length == 20)
-            return 10;
-        return 1000;
+        return (long)junctionBoxes.Item1.X * junctionBoxes.Item2.X;
     }
 
     public List<DistanceBetweenJunctionBoxes> CalculateAllDistances(List<JunctionBox> points)
@@ -72,9 +67,12 @@ public class Day08Part1
     public class CircuitManager
     {
         readonly List<Circuit> circuits;
+        private List<JunctionBox> junctionBoxesThatCausedLatestMerge;
+
         public CircuitManager()
         {
             circuits = new List<Circuit>();
+            junctionBoxesThatCausedLatestMerge = new List<JunctionBox>();
         }
 
         public void Add(DistanceBetweenJunctionBoxes distance)
@@ -105,23 +103,29 @@ public class Day08Part1
                 }
                 if (circuit.Contains(distance.Point1))
                 {
+                    junctionBoxesThatCausedLatestMerge = [distance.Point1, distance.Point2];
+
                     var circuitWithPoint2 = SearchOtherCircuitsForPoint(circuit, distance.Point2);
                     if (circuitWithPoint2 != null)
                     {
                         return (circuit, circuitWithPoint2);
                     }
                     circuit.Add(distance.Point2);
+
                     Console.WriteLine($"\tAdded {distance.Point2} to existing circuit {circuit.Id}, which now contains {circuit.PrintCircuits()}");
                     return null;
                 }
                 if (circuit.Contains(distance.Point2))
                 {
+                    junctionBoxesThatCausedLatestMerge = [distance.Point1, distance.Point2];
+
                     var circuitWithPoint1 = SearchOtherCircuitsForPoint(circuit, distance.Point1);
                     if (circuitWithPoint1 != null)
                     {
                         return (circuit, circuitWithPoint1);
                     }
                     circuit.Add(distance.Point1);
+
                     Console.WriteLine($"\tAdded {distance.Point1} to existing circuit {circuit.Id}, which now contains {circuit.PrintCircuits()}");
                     return null;
                 }
@@ -142,22 +146,16 @@ public class Day08Part1
             return otherCircuits.FirstOrDefault(c => c.Contains(point)); 
         }
 
-        public (int, int, int) ThreeLargestCircuits()
+        public (JunctionBox, JunctionBox) JunctionBoxesCausingLatestMerge()
         {
-            var orderedCircuits = circuits.OrderByDescending(c => c.CircuitCount).ToList();
-            Console.WriteLine("The three largest circuits are:");
-            for(int i = 0; i < 3; i++)
-            {
-                Console.WriteLine($"\tCircuit {orderedCircuits[i].Id} containing {orderedCircuits[i].PrintCircuits()}");
-            }
-            return (orderedCircuits[0].CircuitCount, orderedCircuits[1].CircuitCount, orderedCircuits[2].CircuitCount);
+            return (junctionBoxesThatCausedLatestMerge[0], junctionBoxesThatCausedLatestMerge[1]);
         }
     }
 
     // A Circuit is basically a list of JunctionBoxes/ Points
     public class Circuit
     {
-        private int id;
+        private readonly int id;
         private List<JunctionBox> points;
         public Circuit(int id, JunctionBox p1, JunctionBox p2)
         {
@@ -235,7 +233,7 @@ public class Day08Part1
 
         public override string ToString()
         {
-            return $"{id}";//-{x},{y},{z}";
+            return $"{id}-{x},{y},{z}";
         }
     }
 }
