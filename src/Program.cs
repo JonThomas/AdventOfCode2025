@@ -1,4 +1,6 @@
-﻿Console.WriteLine("Hello, World!");
+﻿using AdventOfCode2025.Day09Part2;
+
+Console.WriteLine("Hello, World!");
 
 var sw = new System.Diagnostics.Stopwatch();
 sw.Start();
@@ -19,7 +21,8 @@ sw.Start();
 //Console.WriteLine("Advent of Code 2025 - Day 07 Part 2. Solution = " + new Day07Part2().Solve());
 //Console.WriteLine("Advent of Code 2025 - Day 08 Part 1. Solution = " + new Day08Part1().Solve());
 //Console.WriteLine("Advent of Code 2025 - Day 08 Part 2. Solution = " + new Day08Part2().Solve());
-Console.WriteLine("Advent of Code 2025 - Day 09 Part 1. Solution = " + new Day09Part1().Solve());
+//Console.WriteLine("Advent of Code 2025 - Day 09 Part 1. Solution = " + new Day09Part1().Solve());
+Console.WriteLine("Advent of Code 2025 - Day 09 Part 2. Solution = " + Day09Part2.Solve());
 
 sw.Stop();
 Console.WriteLine($"Execution Time: {sw.ElapsedMilliseconds} ms");
