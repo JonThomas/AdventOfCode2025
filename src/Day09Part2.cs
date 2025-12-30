@@ -1,5 +1,3 @@
-using System.Net.Http.Headers;
-
 namespace AdventOfCode2025.Day09Part2;
 
 public class Day09Part2
@@ -20,7 +18,7 @@ public class Day09Part2
         {
             var coordinates = line.Split(',');
             var redTile = new RedTile(int.Parse(coordinates[0]), int.Parse(coordinates[1]));
-            //redTile.SetIsInsidePolygon(true);   // The input tiles form the polygon, so they are by definition inside it
+            redTile.SetIsInsidePolygon(true);   // The input tiles form the polygon, so they are by definition inside it
             redTiles.Add(redTile);
         }
 
@@ -44,9 +42,18 @@ public class Day09Part2
             }
             if(redRectangle.IsInsidePolygon())
             {
-                Console.WriteLine();
                 Console.WriteLine($"\tFound largest rectangle inside polygon with area {redRectangle.Area}");
-                return redRectangle.Area;
+                Console.WriteLine("\tNow checking if any parts of the polygon crosses any of the edges of this rectangle");
+                bool rectangleIntersectsWithPolygon = edgeChecker.DoesRectangleIntersectPolygon(redRectangle);
+                if(!rectangleIntersectsWithPolygon)
+                {
+                    Console.WriteLine($"\tThe rectangle with area {redRectangle.Area} does not intersect with the polygon, so it is fully inside it");
+                    return redRectangle.Area;
+                }
+                else
+                {
+                    Console.WriteLine($"\tThe rectangle with area {redRectangle.Area} intersects with the polygon");
+                }
             }
         }
 
@@ -60,11 +67,13 @@ public class Day09Part2
 
 internal class VerticalEdgeChecker
 {
-    private List<Edge> verticalEdges;
+    private List<RedEdge> verticalEdges;
+    private List<RedEdge> horizontalEdges;
 
     public VerticalEdgeChecker(List<RedTile> redTiles)
     {
-        verticalEdges = new List<Edge>();
+        verticalEdges = new List<RedEdge>();
+        horizontalEdges = new List<RedEdge>();
         RedTile? previousTile = null;
         var firstRedTile = redTiles.First();
 
@@ -81,13 +90,19 @@ internal class VerticalEdgeChecker
                 if(redTile.X == previousTile.X && redTile.Y != previousTile.Y)
                 {
                     // Found a vertical edge
-                    verticalEdges.Add(new Edge(previousTile, redTile));
+                    verticalEdges.Add(new RedEdge(previousTile, redTile));
                     Console.WriteLine($"Added vertical edge between {previousTile} and {redTile}");
+                }
+                else
+                {
+                    horizontalEdges.Add(new RedEdge(previousTile, redTile));
+                    Console.WriteLine($"Added horizontal edge between {previousTile} and {redTile}");
                 }
             }
             previousTile = redTile;
         }
         Console.WriteLine($"Total vertical edges: {verticalEdges.Count}");
+        Console.WriteLine($"Total horizontal edges: {horizontalEdges.Count}");
     }
 
     public int CountVerticalEdgesCrossedByRay(RedTile tile)
@@ -105,15 +120,72 @@ internal class VerticalEdgeChecker
         return count;
     }
 
-    internal class Edge
+    public bool DoesRectangleIntersectPolygon(RedRectangle redRectangle)
+    {
+        var redTiles = redRectangle.GetAllFourCorners().ToArray();
+
+        // TODO: This loop doesn't always find the four edges
+        for(int i = 0; i < 4; i++)
+        {
+            RedEdge? redEdge = null;
+            List<RedEdge> edgesPotentiallyCrossing = new List<RedEdge>();
+            if(redTiles[i].X == redTiles[(i+1) % 4].X)
+            {
+                // Vertical edge
+                redEdge = verticalEdges.FirstOrDefault(e => e.IsDefinedByTheseTiles(redTiles[i], redTiles[(i + 1) % 4]));
+                edgesPotentiallyCrossing = horizontalEdges;
+            }
+            else
+            {
+                // Horizontal edge
+                redEdge = horizontalEdges.FirstOrDefault(e => e.IsDefinedByTheseTiles(redTiles[i], redTiles[(i + 1) % 4]));
+                edgesPotentiallyCrossing = verticalEdges;
+            }
+
+            if(redEdge == null)
+            {
+                throw new Exception($"Could not find edge defined by tiles {redTiles[i]} and {redTiles[(i + 1) % 4]}");
+            }
+
+            var crossingEdge = redEdge.CrossesAnotherEdge(edgesPotentiallyCrossing);
+            if(crossingEdge != null)
+            {
+                Console.WriteLine($"\t\tThe edge {redEdge} of Rectangle {redRectangle} crosses edge {crossingEdge}");
+                return true;
+            }
+            else
+            {
+                continue;
+            }
+        }
+        return false;
+    }
+
+    internal class RedEdge
     {
         private readonly RedTile P0;
         private readonly RedTile P1;
+        private bool? crossesOtherEdge;
+        private RedEdge? edgeThatThisEdgeCrossesWith;
+        private readonly bool isVertical;
 
-        public Edge(RedTile p0, RedTile p1)
+        public RedEdge(RedTile p0, RedTile p1)
         {
             P0 = p0;
             P1 = p1;
+            crossesOtherEdge = null;
+            if(p0.X == p1.X)
+            {
+                isVertical = true;
+            }
+            else if(p0.Y == p1.Y)
+            {
+                isVertical = false;
+            }
+            else
+            {
+                throw new Exception($"Edge defined by tiles {p0} and {p1} is neither vertical nor horizontal");
+            }
         }
 
         internal bool IsPointToTheLeft(RedTile tile)
@@ -133,9 +205,58 @@ internal class VerticalEdgeChecker
             return true;
         }
 
+        internal bool IsDefinedByTheseTiles(RedTile t1, RedTile t2)
+        {
+            return (P0 == t1 && P1 == t2) || (P0 == t2 && P1 == t1);
+        }
+
         public override string ToString()
         {
             return $"{P0} to {P1}";
+        }
+
+        internal RedEdge? CrossesAnotherEdge(List<RedEdge> edgesPotentiallyCrossing)
+        {
+            if(crossesOtherEdge.HasValue)
+            {
+                return edgeThatThisEdgeCrossesWith;
+            }
+            if(isVertical)
+            {
+                foreach(var edge in edgesPotentiallyCrossing)
+                {
+                    // This is a vertical edge, so edgesPotentiallyCrossing only contains horizontal edges
+                    if(P0.X >= Math.Min(edge.P0.X, edge.P1.X) &&
+                        P0.X <= Math.Max(edge.P0.X, edge.P1.X) &&
+                        edge.P0.Y >= Math.Min(P0.Y, P1.Y) &&
+                        edge.P0.Y <= Math.Max(P0.Y, P1.Y))
+                    {
+                        Console.WriteLine($"\t\tEdge {this} crosses edge {edge}");
+                        crossesOtherEdge = true;
+                        edgeThatThisEdgeCrossesWith = edge;
+                        return edge;
+                    }
+                } 
+            }
+            else
+            {
+                // This is a horizontal edge, so edgesPotentiallyCrossing only contains vertical edges
+                foreach(var edge in edgesPotentiallyCrossing)
+                {
+                    if(P0.X >= Math.Min(edge.P0.X, edge.P1.X) &&
+                        P0.X <= Math.Max(edge.P0.X, edge.P1.X) &&
+                        edge.P0.Y >= Math.Min(P0.Y, P1.Y) &&
+                        edge.P0.Y <= Math.Max(P0.Y, P1.Y))
+                    {
+                        Console.WriteLine($"\t\tEdge {this} crosses edge {edge}");
+                        crossesOtherEdge = true;
+                        edgeThatThisEdgeCrossesWith = edge;
+                        return edge;
+                    }
+                }
+            }
+            crossesOtherEdge = false;
+            return null;
         }
     }
 }
@@ -183,7 +304,7 @@ internal class RedRectangle
         Area = (long)(Math.Abs(tile2.X - tile1.X) + 1) * (Math.Abs(tile2.Y - tile1.Y) + 1);;
     }
 
-    internal IEnumerable<RedTile> GetAllFourCorners()
+    internal List<RedTile> GetAllFourCorners()
     {
         return new List<RedTile>{ Tile1, Tile2, Tile3, Tile4 };
     }
@@ -226,7 +347,7 @@ internal class RedTile
 
     public override string ToString()
     {
-        var isInside = IsInsideCalculationDone ? (isInsidePolygon ? " inside" : " outside") : "";
+        var isInside = IsInsideCalculationDone ? (isInsidePolygon ? " inside" : " **outside**") : "";
         return $"{X},{Y}{isInside}";
     }
 }

@@ -61,7 +61,7 @@ public class Day09Part2Tests
     [InlineData(3, 5)]
     public void Day9_IsPointToTheLeft_AllPointsAreLeftOfThisEdge(int x, int y)
     {
-        var edge = new VerticalEdgeChecker.Edge(new(3,3), new(3,5));
+        var edge = new VerticalEdgeChecker.RedEdge(new(3,3), new(3,5));
         Assert.True(edge.IsPointToTheLeft(new(x,y)));
     }
 
@@ -76,7 +76,7 @@ public class Day09Part2Tests
     [InlineData(2, 7)]
     public void Day9_IsPointToTheLeft_PointsAreLeftButOverOrUnderTheEdge(int x, int y)
     {
-        var edge = new VerticalEdgeChecker.Edge(new(3,3), new(3,5));
+        var edge = new VerticalEdgeChecker.RedEdge(new(3,3), new(3,5));
         Assert.False(edge.IsPointToTheLeft(new(x,y)));
     }
 
@@ -87,7 +87,7 @@ public class Day09Part2Tests
     [InlineData(3, 7)]
     public void Day9_IsPointToTheLeft_PointsAreDirectlyOverOrUnderThisEdge(int x, int y)
     {
-        var edge = new VerticalEdgeChecker.Edge(new(3,3), new(3,5));
+        var edge = new VerticalEdgeChecker.RedEdge(new(3,3), new(3,5));
         Assert.False(edge.IsPointToTheLeft(new(x,y)));
     }
 
@@ -108,7 +108,7 @@ public class Day09Part2Tests
     [InlineData(5, 7)]
     public void Day9_IsPointToTheLeft_PointsAreRightOfTheEdge(int x, int y)
     {
-        var edge = new VerticalEdgeChecker.Edge(new(3,3), new(3,5));
+        var edge = new VerticalEdgeChecker.RedEdge(new(3,3), new(3,5));
         Assert.False(edge.IsPointToTheLeft(new(x,y)));
     }
 }
