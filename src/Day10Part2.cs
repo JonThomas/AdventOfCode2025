@@ -146,7 +146,8 @@ internal class Buttons
     private readonly List<Button> _buttons;
     private readonly RequiredJoltageLevels _requiredJoltageLevels;
     private readonly Queue<StateAndDepth> queue;
-
+    private readonly HashSet<string> visitedStates = new HashSet<string>();
+    
     public Buttons(RequiredJoltageLevels requiredJoltageLevels, List<Button> buttons)
     {
         _buttons = buttons;
@@ -164,6 +165,7 @@ internal class Buttons
                 continue;
             }
             var firstState = button.Toggle(initialState);
+            visitedStates.Add(string.Join(",", firstState));
             queue.Enqueue(new StateAndDepth(firstState, 1));
         }
 
@@ -185,15 +187,26 @@ internal class Buttons
                 var newState = button.Toggle(currentState);
                 //Console.WriteLine($"Iteration {i}: Current state {string.Join(",", currentState)} + Button {button} => New state {string.Join(",", newState)}");
 
+                if(visitedStates.Contains(string.Join(",", newState)))
+                {
+                    //Console.WriteLine($"Iteration {i}: Current state {string.Join(",", currentState)} + Button {button} already visited, skipping.");
+                    continue;
+                }
+
                 if(_requiredJoltageLevels.AreSatisfiedBy(newState))    // Success 🎉
                 {
                     Console.WriteLine($"{_requiredJoltageLevels} reached in iteration {i}");
                     return currentStateAndDepth.Depth + 1;
                 }
 
+                visitedStates.Add(string.Join(",", newState));
                 queue.Enqueue(new StateAndDepth(newState, currentStateAndDepth.Depth + 1));
 
                 i++;
+                if(i % 1000000 == 0)
+                {
+                    Console.WriteLine($"Iteration {i}: Queue size {queue.Count}, visited states {visitedStates.Count}. Current state: {string.Join(",", currentState)}");
+                }
             }
         }
 
