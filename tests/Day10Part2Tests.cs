@@ -22,7 +22,7 @@ public class Day10Part2Tests
     public void Day10_PressUntilSolved_DoesNotCrash()
     {
         var buttons = new Buttons(
-            new RequiredJoltageLevels(new List<int> { 7,5,1,2,7,2 }),
+            new RequiredJoltageLevels(new List<int> { 7,5,12,7,2 }),
             new List<Button>
             {
                 new Button(new List<int> { 0,2,3,4 }),
@@ -33,6 +33,6 @@ public class Day10Part2Tests
             });
 
         var solution = buttons.PressUntilSolved();
-        Assert.Equal(3, solution);  
+        Assert.Equal(12, solution);  
     }
 }

@@ -145,52 +145,55 @@ internal class Buttons
     private List<int> initialState;
     private readonly List<Button> _buttons;
     private readonly RequiredJoltageLevels _requiredJoltageLevels;
-    private readonly Queue<List<ButtonAndJoltage>> queue;
+    private readonly Queue<StateAndDepth> queue;
 
     public Buttons(RequiredJoltageLevels requiredJoltageLevels, List<Button> buttons)
     {
         _buttons = buttons;
         _requiredJoltageLevels = requiredJoltageLevels;
         initialState = Enumerable.Repeat(0, _requiredJoltageLevels.Length).ToList();
-        queue = new Queue<List<ButtonAndJoltage>>();
+        queue = new Queue<StateAndDepth>();
     }
 
     internal int PressUntilSolved()
     {
         foreach(var button in _buttons)
         {
-            queue.Enqueue(new List<ButtonAndJoltage> { new ButtonAndJoltage(button, initialState) });
+            if(button.WouldExceedMaxJoltage(initialState, _requiredJoltageLevels))
+            {
+                continue;
+            }
+            var firstState = button.Toggle(initialState);
+            queue.Enqueue(new StateAndDepth(firstState, 1));
         }
 
-        int i = 0;
+        int i = _buttons.Count;
         while(true)
         {
-            var currentButtonSequenceAndState = queue.Dequeue();
-            //Console.WriteLine($"Iteration {i++}, trying button sequence: {string.Join(" ", currentButtonSequenceAndState.Select(b => b.Button.ToString()))}");
+            var currentStateAndDepth = queue.Dequeue();
+            var currentState = currentStateAndDepth.State;
 
-            if(currentButtonSequenceAndState.Count == 0)
-            {
-                throw new ArgumentOutOfRangeException("Could not solve machine: No items in queue");
-            }
-
-            var buttonToPress = currentButtonSequenceAndState.Last().Button;
-            var currentState = currentButtonSequenceAndState.Last().State;
-            var newState = buttonToPress.Toggle(currentState);
-            if(_requiredJoltageLevels.AreSatisfiedBy(newState))    // Success 🎉
-            {
-                Console.WriteLine($"{_requiredJoltageLevels} reached by pressing button {buttonToPress} in iteration {i}");
-                return currentButtonSequenceAndState.Count;
-            }
-
-            // Add next list of buttons to try to the queue, except the button we just pressed (pressing same button twice will not get us anywhere)
+            // Add next list of buttons to try to the queue, unless it solves the problem or would exceed max joltage
             foreach(var button in _buttons)
             {
-                if(button.WouldExceedMaxJoltage(newState, _requiredJoltageLevels))
+                if(button.WouldExceedMaxJoltage(currentState, _requiredJoltageLevels))
                 {
+                    //Console.WriteLine($"Iteration {i}: Current state {string.Join(",", currentState)} + Button {button} would exceed max joltage, skipping.");
                     continue;
                 }
-                var newButtonAndStateList = new List<ButtonAndJoltage>(currentButtonSequenceAndState) { new ButtonAndJoltage(button, newState) };
-                queue.Enqueue(newButtonAndStateList);
+
+                var newState = button.Toggle(currentState);
+                //Console.WriteLine($"Iteration {i}: Current state {string.Join(",", currentState)} + Button {button} => New state {string.Join(",", newState)}");
+
+                if(_requiredJoltageLevels.AreSatisfiedBy(newState))    // Success 🎉
+                {
+                    Console.WriteLine($"{_requiredJoltageLevels} reached in iteration {i}");
+                    return currentStateAndDepth.Depth + 1;
+                }
+
+                queue.Enqueue(new StateAndDepth(newState, currentStateAndDepth.Depth + 1));
+
+                i++;
             }
         }
 
@@ -203,18 +206,17 @@ internal class Buttons
     }
 }
 
-internal class ButtonAndJoltage
+internal class StateAndDepth
 {
-    private Button _button;
     private List<int> _state;
+    private int _depth;
 
-    public ButtonAndJoltage(Button button, List<int> state)
+    public StateAndDepth(List<int> state, int depth)
     {
-        _button = button;
         _state = state;
+        _depth = depth;
     }
-
-    public Button Button => _button;
+    public int Depth => _depth;
     public List<int> State => _state;
 }
 
@@ -242,11 +244,11 @@ internal class Button
         return $"({string.Join(",", _indicatorsToggled)})";
     }
 
-    internal bool WouldExceedMaxJoltage(List<int> newState, RequiredJoltageLevels requiredJoltageLevels)
+    internal bool WouldExceedMaxJoltage(List<int> currentState, RequiredJoltageLevels requiredJoltageLevels)
     {
         foreach(var index in _indicatorsToggled)
         {
-            if(newState[index] == requiredJoltageLevels[index])
+            if(currentState[index] == requiredJoltageLevels[index])
             {
                 return true;
             }
